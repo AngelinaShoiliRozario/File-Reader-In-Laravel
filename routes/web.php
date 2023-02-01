@@ -36,6 +36,33 @@ Route::post('/upload', function (Request $request) {
         $location = 'uploads'; //Created an "uploads" folder for that
         $file->move($location, $filename);
         $filepath = public_path($location . '/' . $filename);
+        // dd($filepath);
+        $reader = new Xlsx();
+        $spreadsheet = IOFactory::load($filepath);
+        $sheet  = $spreadsheet->getActiveSheet();
+        $worksheetinfo = $reader->listWorksheetInfo($filepath);
+        $totalRows = $worksheetinfo[0]['totalRows'];
+        $array = [];
+        for($row = 2; $row < $totalRows; $row++){
+            $id = $sheet->getCell("A{$row}")->getValue();
+            $name = $sheet->getCell("B{$row}")->getValue();
+            $club = $sheet->getCell("C{$row}")->getValue();
+            $email = $sheet->getCell("D{$row}")->getValue();
+            $position = $sheet->getCell("E{$row}")->getValue();
+            $age = $sheet->getCell("F{$row}")->getValue();
+            $salary = $sheet->getCell("G{$row}")->getValue();
+            $object = new stdClass();
+            $object->name = $name;
+            $object->id = $id;
+            $object->club = $club;
+            $object->salary = $salary;
+            $object->email = $email;
+            $object->age = $age;
+            $object->position = $position;
+            array_push($array, $object);
+
+        }
+        print_r($array);
     }
 });
 

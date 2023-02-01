@@ -16,7 +16,7 @@ class DemoController extends Controller
    
     public function export() 
     {
-        return Excel::download(new UsersExport, 'users.xlsx');
+        return Excel::download(new UsersExport, 'users.xlsx'); //will ;et the file to be downloaded
     }
    
     public function import(Request $request) 
